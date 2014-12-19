@@ -62,18 +62,15 @@ if (!App.config) {
   process.exit(1);
 }
 
-// Middlewarez
-// if (App.env != "test") {
-//   App.app.use(express.logger());
-// }
-// App.app.use(App.app.router);
 App.app.use(express.static( App.root + "/public" ));
 console.log("Statically serving files in " + App.root + "/public");
 
+// Setup morgan logging level
 App.app.use(morgan(App.config.app.loglevel));
 console.log("[morgan] Logging level set to: '" + App.config.app.loglevel + "'");
 
 // Bootstrap the routes
-App.require("config/routes")(App.app);
+App.app.use("/", App.require("config/router.js"));
 
+// Bootstrap the database
 App.require("config/database.js");
