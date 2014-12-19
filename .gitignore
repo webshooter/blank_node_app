@@ -22,7 +22,7 @@ Temporary Items
 .apdisk
 
 #-- node/bower Items
-node_modules/
+node_modules
 bower_components/
 
 # Grunt intermediate storage

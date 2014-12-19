@@ -1,8 +1,10 @@
 var env         = process.env.NODE_ENV || 'development',
     packageJson = require("../package.json"),
     express     = require("express"),
+    morgan      = require("morgan"),
     fs          = require("fs");
 
+console.log(require("./config")[env].loglevel);
 console.log("Loading App in " + env + " mode.");
 
 global.App = {
@@ -66,6 +68,10 @@ if (App.env != "test") {
   App.app.use(express.logger());
 }
 App.app.use(App.app.router);
+App.app.use(morgan(App.config.loglevel));
+// console.log("[morgan] Logging level set to '" + App.config.loglevel + "'");
+console.log("[morgan] Logging level set to:");
+console.log(App.config.loglevel);
 
 // Bootstrap teh [sic] routes
 App.require("config/routes")(App.app);
