@@ -4,7 +4,6 @@ var env         = process.env.NODE_ENV || 'development',
     morgan      = require("morgan"),
     fs          = require("fs");
 
-console.log(require("./config")[env].loglevel);
 console.log("Loading App in " + env + " mode.");
 
 global.App = {
@@ -64,16 +63,17 @@ if (!App.config) {
 }
 
 // Middlewarez
-if (App.env != "test") {
-  App.app.use(express.logger());
-}
-App.app.use(App.app.router);
-App.app.use(morgan(App.config.loglevel));
-// console.log("[morgan] Logging level set to '" + App.config.loglevel + "'");
-console.log("[morgan] Logging level set to:");
-console.log(App.config.loglevel);
+// if (App.env != "test") {
+//   App.app.use(express.logger());
+// }
+// App.app.use(App.app.router);
+App.app.use(express.static( App.root + "/public" ));
+console.log("Statically serving files in " + App.root + "/public");
 
-// Bootstrap teh [sic] routes
+App.app.use(morgan(App.config.app.loglevel));
+console.log("[morgan] Logging level set to: '" + App.config.app.loglevel + "'");
+
+// Bootstrap the routes
 App.require("config/routes")(App.app);
 
 App.require("config/database.js");
